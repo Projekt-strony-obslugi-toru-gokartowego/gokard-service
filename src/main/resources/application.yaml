@@ -1,0 +1,29 @@
+spring:
+  flyway:
+    enabled: 'true'
+    validateOnMigrate: 'true'
+    password: ${spring.datasource.password}
+    user: ${spring.datasource.username}
+    sqlMigrationSeparator: __
+    locations: classpath:db/migration
+    url: ${spring.datasource.url}
+    table: FLYWAY_SCHEMA_HISTORY
+    sqlMigrationPrefix: US_
+  datasource:
+    driverClassName: org.postgresql.Driver
+    password: postgres
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/testdb
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  application:
+    name: gokart-service
+server:
+  error:
+    include-stacktrace: never
+    include-message: always
+  port: '8080'
