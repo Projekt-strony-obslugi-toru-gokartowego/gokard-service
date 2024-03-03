@@ -4,23 +4,29 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.gokart.gokartservice.config.SecurityConfig;
+import com.gokart.gokartservice.user.UserService;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gokart.gokartservice.config.SecurityConfig;
 import com.gokart.gokartservice.config.SecurityRoles;
 
 @Import(SecurityConfig.class)
-@ContextConfiguration(classes= RoleControllerTest.RoleController.class)
+@ContextConfiguration(classes = { //
+    RoleControllerTest.RoleController.class, //
+})
 @WebMvcTest(RoleControllerTest.RoleController.class)
 class RoleControllerTest {
 
@@ -32,26 +38,26 @@ class RoleControllerTest {
 
     @GetMapping("/api/client/test")
     @PreAuthorize("""
-          hasRole(T(com.gokart.gokartservice.config.SecurityRoles).CLIENT
-          )
-          """)
+        hasRole(T(com.gokart.gokartservice.config.SecurityRoles).CLIENT
+        )
+        """)
     public String clientTest() {
       return "Accessible by CLIENT, WORKER, and ADMINISTRATOR";
     }
 
     @GetMapping("/api/worker/test")
     @PreAuthorize("""
-          hasRole(T(com.gokart.gokartservice.config.SecurityRoles).WORKER)
-          """)
+        hasRole(T(com.gokart.gokartservice.config.SecurityRoles).WORKER)
+        """)
     public String workerTest() {
       return "Accessible by WORKER and ADMINISTRATOR";
     }
 
     @GetMapping("/api/admin/test")
     @PreAuthorize("""
-          hasRole(T(com.gokart.gokartservice.config.SecurityRoles).ADMINISTRATOR
-          )
-          """)
+        hasRole(T(com.gokart.gokartservice.config.SecurityRoles).ADMINISTRATOR
+        )
+        """)
     public String adminTest() {
       return "Only accessible by ADMINISTRATOR";
     }
@@ -76,7 +82,7 @@ class RoleControllerTest {
 
     mockMvc
         .perform(MockMvcRequestBuilders.get("/api/worker/test")
-            .with(user("user").roles(securityRole.name())))
+            .with(user("user").password("test").roles(securityRole.name())))
         .andExpect(status().isOk())
         .andExpect(content().string("Accessible by WORKER and ADMINISTRATOR"));
   }
