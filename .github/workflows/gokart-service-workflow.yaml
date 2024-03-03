@@ -76,4 +76,6 @@ jobs:
           context: .
           file: Dockerfile-app
           push: true
-          tags: ajres/gokart-service:latest
+          tags: |
+            ajres/gokart-service:latest
+            ajres/gokart-service:${{ github.sha }}
