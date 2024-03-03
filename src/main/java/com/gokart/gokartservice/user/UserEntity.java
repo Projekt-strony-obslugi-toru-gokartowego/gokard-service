@@ -1,5 +1,7 @@
 package com.gokart.gokartservice.user;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
@@ -21,29 +23,31 @@ public class UserEntity {
   @Id
   @UuidGenerator
   @GeneratedValue
+  @Column(name = "ID")
   private String id;
 
-  @Column(name = "email", unique = true, nullable = false)
+  @Column(name = "EMAIL", unique = true, nullable = false)
   private String email;
 
-  @Column
+  @Column(name = "ENCRYPTED_PASSWORD")
   private String encryptedPassword;
 
-  @Column
+  @Column(name = "FIRST_NAME")
   private String firstName;
 
-  @Column
+  @Column(name = "LAST_NAME")
   private String lastname;
 
-  @Column
+  @Column(name = "PHONE_NUMBER")
   private String phoneNumber;
 
-  @Column
+  @Column(name = "PHONE_NUMBER_REGION")
   private String phoneNumberRegion;
 
-  @Column
+  @Column(name = "DATE_OF_BIRTH")
   private LocalDate localDate;
 
-  @Column
+  @Column(name = "ROLE")
+  @Enumerated(EnumType.STRING)
   private SecurityRoles role = SecurityRoles.CLIENT;
 }

@@ -1,6 +1,6 @@
 spring:
   flyway:
-    enabled: 'false'
+    enabled: 'true'
     validateOnMigrate: 'true'
     password: ${spring.datasource.password}
     user: ${spring.datasource.username}
@@ -8,7 +8,7 @@ spring:
     locations: classpath:db/migration
     url: ${spring.datasource.url}
     table: FLYWAY_SCHEMA_HISTORY
-    sqlMigrationPrefix: US_
+    sqlMigrationPrefix: GS_
   datasource:
     driverClassName: org.postgresql.Driver
     password: postgres
@@ -22,10 +22,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: gokart-service
-  security:
-    user:
-      name: user
-      password: userpassword
 server:
   error:
     include-stacktrace: never

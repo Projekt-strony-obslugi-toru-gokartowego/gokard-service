@@ -22,11 +22,24 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
   private final RegionService regionService;
   private final PasswordEncoder passwordEncoder;
+
+  @Override
+  public UserDetails loadUserByUsername(String email) {
+
+    UserEntity user = userRepository.findByEmail(email).orElseThrow(
+            () -> new UserNotFoundException(String.format("User does not exist, email: %s", email)));
+
+    return org.springframework.security.core.userdetails.User.builder() //
+            .username(user.getEmail()) //
+            .password(user.getEncryptedPassword()) //
+            .authorities(user.getRole().getRoleWithPrefix()) //
+            .build();
+  }
 
   public void registerNewUser(RegistrationRequest registrationRequest) {
 

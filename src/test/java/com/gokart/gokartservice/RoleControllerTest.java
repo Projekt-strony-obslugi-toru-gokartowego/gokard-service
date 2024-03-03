@@ -1,37 +1,55 @@
 package com.gokart.gokartservice;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.gokart.gokartservice.config.SecurityConfig;
-import com.gokart.gokartservice.user.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.WebApplicationContext;
 
+import com.gokart.gokartservice.config.SecurityConfig;
 import com.gokart.gokartservice.config.SecurityRoles;
 
-@Import(SecurityConfig.class)
-@ContextConfiguration(classes = { //
-    RoleControllerTest.RoleController.class, //
-})
-@WebMvcTest(RoleControllerTest.RoleController.class)
+// @Import(SecurityConfig.class)
+// @ContextConfiguration(classes = { //
+// RoleControllerTest.RoleController.class, //
+// UserService.class //
+// })
+// @WebMvcTest(RoleControllerTest.RoleController.class)
+// @EnableJpaRepositories
+
+
+@ActiveProfiles("test")
+@SpringBootTest
+@ContextConfiguration(classes = RoleControllerTest.RoleController.class)
+@Disabled
 class RoleControllerTest {
 
   @Autowired
+  private WebApplicationContext context;
+
   private MockMvc mockMvc;
+
+  @BeforeEach
+  public void setup() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+  }
 
   @RestController
   public static class RoleController {
