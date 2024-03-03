@@ -40,14 +40,14 @@ class UserController {
     userService.registerNewUser(registrationRequest);
   }
 
-  @PostMapping(value = "/login")
-  @ResponseStatus(HttpStatus.OK)
-  LoginResponse login(@Valid @RequestBody LoginRequest request) {
-//    authenticationManager
-//        .authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
-    // String token = JwtHelper.generateToken(request.email());
-    return new LoginResponse(request.email(), "someToken");
-  }
+//  @PostMapping(value = "/login")
+//  @ResponseStatus(HttpStatus.OK)
+//  LoginResponse login(@Valid @RequestBody LoginRequest request) {
+////    authenticationManager
+////        .authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+//    // String token = JwtHelper.generateToken(request.email());
+//    return new LoginResponse(request.email(), "someToken");
+//  }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
