@@ -2,7 +2,6 @@ package com.gokart.gokartservice.user.api.v1;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.gokart.gokartservice.user.api.v1.model.RoleChangeRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gokart.gokartservice.config.JwtHelper;
 import com.gokart.gokartservice.user.UserService;
 import com.gokart.gokartservice.user.api.v1.model.LoginRequest;
 import com.gokart.gokartservice.user.api.v1.model.LoginResponse;
 import com.gokart.gokartservice.user.api.v1.model.RegistrationRequest;
+import com.gokart.gokartservice.user.api.v1.model.RoleChangeRequest;
 import com.gokart.gokartservice.user.api.v1.model.UserResponse;
 import com.gokart.gokartservice.user.api.v1.model.UserResponseFilterRequest;
 
@@ -34,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 class UserController {
   static final String USERS_ENDPOINT = "/api/v1/users";
   private final UserService userService;
-  private final AuthenticationManager authenticationManager;
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
@@ -45,18 +43,18 @@ class UserController {
   @PostMapping(value = "/login")
   @ResponseStatus(HttpStatus.OK)
   LoginResponse login(@Valid @RequestBody LoginRequest request) {
-    authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
-    String token = JwtHelper.generateToken(request.email());
-    return new LoginResponse(request.email(), token);
+//    authenticationManager
+//        .authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+    // String token = JwtHelper.generateToken(request.email());
+    return new LoginResponse(request.email(), "someToken");
   }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("""
-          hasRole(T(com.gokart.gokartservice.config.SecurityRoles).ADMINISTRATOR)
-          """)
-  void updateUserRole(@Valid @RequestBody RoleChangeRequest request){
+      hasRole(T(com.gokart.gokartservice.config.SecurityRoles).ADMINISTRATOR)
+      """)
+  void updateUserRole(@Valid @RequestBody RoleChangeRequest request) {
     userService.changeUserRole(request);
   }
 
