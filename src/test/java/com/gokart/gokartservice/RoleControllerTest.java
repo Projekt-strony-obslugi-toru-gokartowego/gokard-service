@@ -5,13 +5,18 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.gokart.gokartservice.config.RoleHierarchyConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,30 +31,15 @@ import org.springframework.web.context.WebApplicationContext;
 import com.gokart.gokartservice.config.SecurityConfig;
 import com.gokart.gokartservice.config.SecurityRoles;
 
-// @Import(SecurityConfig.class)
-// @ContextConfiguration(classes = { //
-// RoleControllerTest.RoleController.class, //
-// UserService.class //
-// })
-// @WebMvcTest(RoleControllerTest.RoleController.class)
-// @EnableJpaRepositories
-
-
-@ActiveProfiles("test")
-@SpringBootTest
-@ContextConfiguration(classes = RoleControllerTest.RoleController.class)
-@Disabled
+@Import(RoleHierarchyConfig.class)
+@ContextConfiguration(classes = { //
+    RoleControllerTest.RoleController.class, //
+})
+@WebMvcTest(RoleControllerTest.RoleController.class)
 class RoleControllerTest {
 
   @Autowired
-  private WebApplicationContext context;
-
   private MockMvc mockMvc;
-
-  @BeforeEach
-  public void setup() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-  }
 
   @RestController
   public static class RoleController {
