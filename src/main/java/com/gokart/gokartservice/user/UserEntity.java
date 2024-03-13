@@ -2,6 +2,7 @@ package com.gokart.gokartservice.user;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
@@ -46,6 +47,9 @@ public class UserEntity {
 
   @Column(name = "DATE_OF_BIRTH")
   private LocalDate localDate;
+
+  @Column(name = "PHOTO_URL")
+  private String photoUrl;
 
   @Column(name = "ROLE")
   @Enumerated(EnumType.STRING)

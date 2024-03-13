@@ -1,8 +1,12 @@
 package com.gokart.gokartservice.user.api.v1.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserResponseFilterRequest {
 
   private String email;

@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
-import com.gokart.gokartservice.user.api.v1.model.PhoneRegionResponse;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 

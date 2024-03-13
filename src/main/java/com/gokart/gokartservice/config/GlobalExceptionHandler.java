@@ -99,6 +99,7 @@ public class GlobalExceptionHandler implements AuthenticationEntryPoint {
     return new ResponseEntity<>( //
         CustomErrorResponse.builder(httpStatus, message, details)
             .timeStamp(LocalDateTime.now(ZoneOffset.UTC).toString()) //
+            .typeOfRequest(request.getMethod()) //
             .path(request.getRequestURI()) //
             .traceId(traceId) //
             .spanId(spanId) //

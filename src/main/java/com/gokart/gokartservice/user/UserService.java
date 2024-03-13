@@ -12,9 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gokart.gokartservice.config.SecurityRoles;
 import com.gokart.gokartservice.region.RegionService;
 import com.gokart.gokartservice.user.api.v1.model.RegistrationRequest;
 import com.gokart.gokartservice.user.api.v1.model.RoleChangeRequest;
+import com.gokart.gokartservice.user.api.v1.model.UserDetailsResponse;
 import com.gokart.gokartservice.user.api.v1.model.UserResponse;
 
 import jakarta.validation.constraints.NotNull;
@@ -31,14 +33,13 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) {
 
-    UserEntity user = userRepository.findByEmail(email).orElseThrow(
-            () -> new UserNotFoundException(String.format("User does not exist, email: %s", email)));
+    UserEntity user = getUserByEmail(email);
 
     return org.springframework.security.core.userdetails.User.builder() //
-            .username(user.getEmail()) //
-            .password(user.getEncryptedPassword()) //
-            .authorities(user.getRole().getRoleWithPrefix()) //
-            .build();
+        .username(user.getEmail()) //
+        .password(user.getEncryptedPassword()) //
+        .authorities(user.getRole().getRoleWithPrefix()) //
+        .build();
   }
 
   public void registerNewUser(RegistrationRequest registrationRequest) {
@@ -75,8 +76,7 @@ public class UserService implements UserDetailsService {
   }
 
 
-  public Page<UserResponse> getUserList(Pageable pageable, String email, String firstname,
-      String lastname) {
+  public Page<UserResponse> getUserList(Pageable pageable) {
 
     // var specification = buildSpecificationForUserEntities(login, email, firstname, lastname);
 
@@ -97,7 +97,21 @@ public class UserService implements UserDetailsService {
 
   public void changeUserRole(RoleChangeRequest request) {
 
-    userRepository.findByEmail(request.email()).ifPresent( //
-        foundEntity -> foundEntity.setRole(request.securityRole()));
+    UserEntity foundEntity = getUserByEmail(request.email());
+
+    foundEntity.setRole(SecurityRoles.valueOf(request.securityRole()));
+    userRepository.saveAndFlush(foundEntity);
+  }
+
+  public UserDetailsResponse getUserDetails(String userEmail) {
+
+    UserEntity foundEntity = getUserByEmail(userEmail);
+    return new ModelMapper().map(foundEntity, UserDetailsResponse.class);
+  }
+
+  private UserEntity getUserByEmail(String email) {
+
+    return userRepository.findByEmail(email).orElseThrow(
+        () -> new UserNotFoundException(String.format("User does not exist, email: %s", email)));
   }
 }

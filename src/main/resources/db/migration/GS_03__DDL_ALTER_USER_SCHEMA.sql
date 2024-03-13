@@ -1,0 +1,2 @@
+ALTER TABLE USERS ADD COLUMN PHOTO_URL TEXT;
+COMMENT ON COLUMN USERS.PHOTO_URL IS 'Store information about user avatar as link';

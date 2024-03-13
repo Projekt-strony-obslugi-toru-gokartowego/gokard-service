@@ -15,6 +15,7 @@ public class CustomErrorResponse {
   private final List<String> details;
   private String timeStamp;
   private String path;
+  private String typeOfRequest;
   private String traceId;
   private String spanId;
 
